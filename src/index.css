@@ -1,0 +1,104 @@
+/* Reset global básico para evitar margens brancas do navegador */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Using Tailwind via CDN - keep small global overrides here */
+
+:root {
+  --max-width: 1200px;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f3f4f6;
+}
+
+/* App container */
+.app-container {
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Small helpers */
+.card-surface { /* used for content areas */
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+}
+
+.table-scroll {
+  overflow: auto;
+}
+
+/* Make table headers more professional */
+.table-head th {
+  background: linear-gradient(90deg, rgba(18,140,126,1), rgba(15,107,98,1));
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+/* Small WhatsApp icon wrap */
+.whatsapp-link svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+}
+
+/* Responsive tweaks */
+@media (min-width: 1024px) {
+  .lg-sidebar-pad {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Sidebar reinforcement styles to guarantee correct contrast and spacing */
+.sidebar {
+  background: linear-gradient(180deg, #0f6b62 0%, #0a443c 100%);
+  color: #fff;
+  box-shadow: 8px 16px 40px rgba(16,24,40,0.08);
+}
+.sidebar .p-6 {
+  background: rgba(255,255,255,0.04);
+}
+.sidebar .text-2xl {
+  color: rgba(255,255,255,0.98);
+}
+
+/* Improve header / search input and actions inside content card */
+.card-surface .px-6.px-6, .card-surface .py-4.py-4 {}
+.card-surface .border-b { background: rgba(16,24,40,0.02); }
+
+/* Table header visual polish */
+.table-head th {
+  background: linear-gradient(90deg, rgba(18,140,126,1), rgba(15,107,98,1));
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.table-head th:first-child { border-top-left-radius: 8px; }
+.table-head th:last-child { border-top-right-radius: 8px; }
+
+/* Search input and actions */
+input[placeholder] {
+  background: white;
+  border: 1px solid rgba(16,24,40,0.06);
+}
+
+/* subtle zebra effect if needed */
+tbody tr:nth-child(odd) { background: rgba(16,24,40,0.01); }
+
+
