@@ -29,6 +29,8 @@ function numerosCorrespondem(num1, num2) {
 }
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Modal from "../components/Modal.jsx";
+import { apiFetch } from '../utils/api';
+import { getWsUrl } from '../config/api';
 
 function Leads() {
   // Estado para leads e índice liberado
@@ -52,7 +54,7 @@ function Leads() {
 
   // Buscar leads e índice liberado do backend
   useEffect(() => {
-    fetch(`http://localhost:3001/api/leads?user_id=${userId}`)
+    apiFetch(`api/leads?user_id=${userId}`)
       .then((res) => res.json())
       .then((data) => {
         setLeads(data.leads || []);
@@ -103,7 +105,7 @@ function Leads() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/whatsapp/qr")
+    apiFetch("api/whatsapp/qr")
       .then((res) => res.json())
       .then((data) => {
         if (!data) return;
@@ -141,7 +143,7 @@ function Leads() {
       return;
     }
     const telefone = lead.telefone;
-    await fetch("http://localhost:3001/api/whatsapp/conversation/start", {
+    await apiFetch("api/whatsapp/conversation/start", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ numero: telefone }),
@@ -174,7 +176,7 @@ function Leads() {
       }
 
       connectionAttempt++;
-      const wsUrl = "ws://localhost:3001";
+      const wsUrl = getWsUrl();
       console.log(
         `🔌 Tentativa ${connectionAttempt} de conexão WebSocket para: ${wsUrl}`,
       );
@@ -364,8 +366,8 @@ function Leads() {
     if (showLoading) setIsLoadingMessages(true);
     try {
       const numero = telefone.replace(/\D/g, "");
-      const res = await fetch(
-        `http://localhost:3001/api/whatsapp/chat/${numero}`,
+      const res = await apiFetch(
+        `api/whatsapp/chat/${numero}`,
       );
       const data = await res.json();
       // Atualiza o id_whatsapp do lead no banco se veio do backend
@@ -434,7 +436,7 @@ function Leads() {
       50,
     );
     // Enviar para o backend usando o telefone
-    await fetch("http://localhost:3001/api/whatsapp/send", {
+    await apiFetch("api/whatsapp/send", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -443,7 +445,7 @@ function Leads() {
       }),
     });
     // Libera próximo lead após envio da mensagem
-    fetch("http://localhost:3001/api/leads/next", {
+    apiFetch("api/leads/next", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user_id: userId, next_index: leadIndex + 1 }),
@@ -460,7 +462,7 @@ function Leads() {
     if (sessionLead) {
       const numero = sessionLead.whatsapp || sessionLead.telefone;
       if (numero) {
-        fetch("http://localhost:3001/api/whatsapp/conversation/end", {
+        apiFetch("api/whatsapp/conversation/end", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ numero }),
@@ -758,8 +760,8 @@ function Leads() {
                         className="px-4 py-2 rounded bg-green-600 text-white"
                         onClick={async () => {
                           try {
-                            await fetch(
-                              `http://localhost:3001/api/leads/${statusModalLead.id}/status`,
+                            await apiFetch(
+                              `api/leads/${statusModalLead.id}/status`,
                               {
                                 method: "PUT",
                                 headers: { "Content-Type": "application/json" },

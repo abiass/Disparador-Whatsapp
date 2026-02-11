@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { apiFetch } from '../utils/api';
 
 function QrCodeWhatsapp() {
   const [qr, setQr] = useState(null);
@@ -6,7 +7,7 @@ function QrCodeWhatsapp() {
   const [message, setMessage] = useState("Carregando QR Code...");
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/whatsapp/qr")
+    apiFetch("api/whatsapp/qr")
       .then((res) => res.json())
       .then((data) => {
         setQr(data.qr || null);

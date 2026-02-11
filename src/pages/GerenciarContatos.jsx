@@ -7,6 +7,7 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
+import { apiFetch } from '../utils/api';
 
 export default function GerenciarContatos() {
   const [contatos, setContatos] = useState([]);
@@ -39,7 +40,7 @@ export default function GerenciarContatos() {
         ...(filtro && { filtro }),
       });
 
-      const response = await fetch(`/api/contatos?${params}`);
+      const response = await apiFetch(`api/contatos?${params}`);
       const data = await response.json();
 
       setContatos(data.contatos);
@@ -67,7 +68,7 @@ export default function GerenciarContatos() {
       const formData = new FormData();
       formData.append("arquivo", file);
 
-      const response = await fetch("/api/contatos/importar", {
+      const response = await apiFetch("api/contatos/importar", {
         method: "POST",
         body: formData,
       });
@@ -94,7 +95,7 @@ export default function GerenciarContatos() {
     if (!confirm("Tem certeza que deseja deletar este contato?")) return;
 
     try {
-      const response = await fetch(`/api/contatos/${id}`, {
+      const response = await apiFetch(`api/contatos/${id}`, {
         method: "DELETE",
       });
 
@@ -120,7 +121,7 @@ export default function GerenciarContatos() {
       setValidandoNumerosEmProgresso(true);
       const ids = contatos.map((c) => c.id);
 
-      const response = await fetch("/api/contatos/validar", {
+      const response = await apiFetch("api/contatos/validar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids }),
@@ -144,7 +145,7 @@ export default function GerenciarContatos() {
 
   const exportarCSV = async () => {
     try {
-      const response = await fetch("/api/contatos/exportar/csv");
+      const response = await apiFetch("api/contatos/exportar/csv");
       const csv = await response.text();
 
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -171,7 +172,7 @@ export default function GerenciarContatos() {
   const downloadTemplate = async () => {
     try {
       console.log("Iniciando download do template...");
-      const response = await fetch("/api/contatos/template/download");
+      const response = await apiFetch("api/contatos/template/download");
       console.log("Response status:", response.status);
 
       if (!response.ok) {

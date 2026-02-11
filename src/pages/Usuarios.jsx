@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Modal from "../components/Modal";
+import { apiFetch } from '../utils/api';
 
-const API_URL = "http://localhost:3001/api/usuarios";
+const API_URL = "api/usuarios";
 
 const tiposUsuario = ["admin", "supervisor", "consultor"];
 const statusUsuario = ["ativo", "inativo"];
@@ -26,7 +27,7 @@ function Usuarios() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(API_URL);
+      const res = await apiFetch(API_URL);
       const data = await res.json();
 
       // Verifica se a resposta é ok e se data é um array
@@ -72,7 +73,7 @@ function Usuarios() {
       const body = { ...form };
       if (!editId) delete body.id;
       if (editId && !form.senha) delete body.senha;
-      const res = await fetch(url, {
+      const res = await apiFetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +100,7 @@ function Usuarios() {
   const handleDelete = async (id) => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/${id}`, {
+      const res = await apiFetch(`${API_URL}/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });

@@ -15,6 +15,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Download, Calendar } from "lucide-react";
+import { apiFetch } from '../utils/api';
 
 export default function Relatorios() {
   const [relatorioGeral, setRelatorioGeral] = useState(null);
@@ -39,14 +40,14 @@ export default function Relatorios() {
       if (dataInicio) params.append("dataInicio", dataInicio);
       if (dataFim) params.append("dataFim", dataFim);
 
-      const response = await fetch(`/api/relatorios/geral?${params}`);
+      const response = await apiFetch(`api/relatorios/geral?${params}`);
       const data = await response.json();
       setRelatorioGeral(data);
 
       // Carregargráficos
       const [enviosRes, statusRes] = await Promise.all([
-        fetch("/api/relatorios/grafico/envios"),
-        fetch("/api/relatorios/grafico/status"),
+        apiFetch("api/relatorios/grafico/envios"),
+        apiFetch("api/relatorios/grafico/status"),
       ]);
 
       const envios = await enviosRes.json();

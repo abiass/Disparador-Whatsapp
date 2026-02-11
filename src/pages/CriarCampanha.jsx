@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Save, Plus, Trash2, ChevronDown, Play, Download } from "lucide-react";
+import { apiFetch } from '../utils/api';
 
 export default function CriarCampanha() {
   const [formulario, setFormulario] = useState({
@@ -30,18 +31,20 @@ export default function CriarCampanha() {
       setCarregando(true);
 
       // Carregar grupos
-      const gruposResponse = await fetch(
-        "/api/contatos/grupos-importacao/listar",
+      const gruposResponse = await apiFetch(
+        "api/contatos/grupos-importacao/listar",
       );
       const gruposData = await gruposResponse.json();
-      setGrupos(gruposData.grupos);
+      setGrupos(gruposData.grupos || []);
 
       // Carregar contatos
-      const contatosResponse = await fetch("/api/contatos?limite=1000");
+      const contatosResponse = await apiFetch("api/contatos?limite=1000");
       const contatosData = await contatosResponse.json();
-      setContatos(contatosData.contatos);
+      setContatos(contatosData.contatos || []);
     } catch (erro) {
       console.error("Erro ao carregar dados:", erro);
+      setGrupos([]);
+      setContatos([]);
     } finally {
       setCarregando(false);
     }
@@ -50,7 +53,7 @@ export default function CriarCampanha() {
   const handleSelecionarGrupo = async (grupoId) => {
     try {
       setCarregando(true);
-      const response = await fetch(`/api/contatos/contatos-grupo/${grupoId}`);
+      const response = await apiFetch(`api/contatos/contatos-grupo/${grupoId}`);
       const data = await response.json();
 
       // Adicionar todos os IDs do grupo aos contatos selecionados
@@ -132,7 +135,7 @@ export default function CriarCampanha() {
         ...(iniciarAgora && { status: "em_andamento" }),
       };
 
-      const response = await fetch("/api/campanhas", {
+      const response = await apiFetch("api/campanhas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

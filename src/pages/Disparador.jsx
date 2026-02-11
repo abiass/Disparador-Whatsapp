@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Play, Pause, Trash2, Plus, Search, RefreshCw } from "lucide-react";
+import { apiFetch } from '../utils/api';
 
 export default function Disparador() {
   const [campanhas, setCampanhas] = useState([]);
@@ -27,7 +28,7 @@ export default function Disparador() {
         ...(busca && { busca }),
       });
 
-      const response = await fetch(`/api/campanhas?${params}`);
+      const response = await apiFetch(`api/campanhas?${params}`);
       const data = await response.json();
 
       setCampanhas(data.campanhas);
@@ -42,7 +43,7 @@ export default function Disparador() {
 
   const iniciarCampanha = async (id) => {
     try {
-      const response = await fetch(`/api/campanhas/${id}/iniciar`, {
+      const response = await apiFetch(`api/campanhas/${id}/iniciar`, {
         method: "POST",
       });
       const data = await response.json();
@@ -59,7 +60,7 @@ export default function Disparador() {
 
   const pausarCampanha = async (id) => {
     try {
-      const response = await fetch(`/api/campanhas/${id}/pausar`, {
+      const response = await apiFetch(`api/campanhas/${id}/pausar`, {
         method: "POST",
       });
       const data = await response.json();
@@ -78,7 +79,7 @@ export default function Disparador() {
     if (!confirm("Tem certeza que deseja deletar esta campanha?")) return;
 
     try {
-      const response = await fetch(`/api/campanhas/${id}`, {
+      const response = await apiFetch(`api/campanhas/${id}`, {
         method: "DELETE",
       });
       const data = await response.json();
